@@ -22,3 +22,38 @@ dotnet user-secrets set "AZURE_OPENAI_DEPLOYMENT" "gpt-4o-mini"
 
 # 3) run
 dotnet run
+
+# 4) Open Swagger
+Once the app is running, open Swagger at:  
+`https://localhost:<port>/swagger`  *(usually 5001/https or 5000/http)*
+
+# 5) Create a job — `POST /jobs`
+In Swagger, open **POST /jobs** → **Try it out** → use this body:
+```json
+{ "url": "https://github.com/dotnet/samples" }
+
+Click Execute and copy the returned jobId
+
+# 6) Check status — GET /jobs/{id}
+
+In Swagger, open GET /jobs/{id}, paste your jobId, then Execute.
+Status will move through:
+
+Queued → Fetching → Parsing → Metrics → Summarizing → Saving → Completed
+
+# 7) Get the report — GET /jobs/{id}/report
+
+In Swagger, open GET /jobs/{id}/report and Execute.
+You should see JSON with:
+
+metrics (cyclomatic/cognitive: avg & max)
+
+topRiskFiles (top 3 risky files)
+
+summary (overview / risks / actions)
+
+summarySource:
+
+"azure" → summary came from Azure OpenAI
+
+"fallback" → rule-based backup (AI call failed)
